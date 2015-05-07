@@ -1,0 +1,4 @@
+DRV8711	KEYWORD1
+setDeviceAddress	KEYWORD2
+setChannel	KEYWORD2
+
