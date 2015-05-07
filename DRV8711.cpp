@@ -1,10 +1,44 @@
 
 
-#include "CC2500.h"
+#include "DRV8711.h"
+uint8_t _SlaveSelectPin;
 
-CC2500::CC2500() {
-	CC2500(DEVADDR, CHANNEL);
+DRV8711::DRV8711() {
+	DRV8711(SPI_SlaveSelect);
 }
+DRV8711::DRV8711(uint8_t SlaveSelectPin) {
+	_SlaveSelectPin = SlaveSelectPin;
+}
+
+
+
+void DRV8711::configureRegisters(){
+	uint16_t CTRL_REG = 0x0000;
+	uint16_t TORQUE_REG = 0x0000;
+	CTRL_REG = DTIME_850 + ISGAIN_40 + STEP1_8 + ENBL;
+	TORQUE_REG = ADDR_TORQUE+SMPLTH_100 + 186;
+	
+	writeRegister(CTRL_REG);
+	writeRegister(TORQUE_REG);
+	
+	Serial.println(CTRL_REG,HEX);
+	Serial.println(TORQUE_REG,HEX);
+	
+}
+
+
+
+//
+// writes data from MCU to DRV8711
+//
+void DRV8711::writeRegister(uint16_t Data){
+	digitalWrite(_SlaveSelectPin,HIGH);  	// enable slave select
+	SPI.transfer(0x00FF&(Data/256)); 	// transfer higher byte
+	SPI.transfer(0x00FF&Data); 		// transfer lower byte
+	digitalWrite(_SlaveSelectPin,LOW);  	// disable slave select
+}
+
+/*
 CC2500::CC2500(uint8_t deviceAddress) {
 	CC2500(deviceAddress, CHANNEL);
 }
@@ -156,10 +190,11 @@ int8_t CC2500::receiveRxBuffer(uint8_t *rxBuffer, uint8_t size) {
 uint8_t CC2500::getChipVersion() {
 	return readStatusRegister(CC2500_REG_VERSION);
 }
-
+*/
 /*
  get status byte (including rx fifo fill) by execuring a read from the NOP command strobe register
 */
+/*
 uint8_t CC2500::getStatusByte() {
 	uint8_t recv;
 	
@@ -172,3 +207,4 @@ uint8_t CC2500::getStatusByte() {
 void CC2500::resetDevice() {
 	execStrobeCommand(CC2500_CMD_SRES);
 }
+*/
