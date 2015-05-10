@@ -22,16 +22,16 @@
 
 
 // CTRL Register Address = 0x0h
-#define ENBL		(0x0001)	// Enable/Disable Motor
-#define RDIR		(0x0002)	// Direction select
+#define ENBL			(0x0001)	// Enable/Disable Motor
+#define RDIR			(0x0002)	// Direction select
 #define RSTEP		(0x0004)	// Perform one step
 #define MODE_0		(0x0008)	// Step Size Mode bit 0
 #define MODE_1		(0x0010)	// Step Size Mode bit 1
 #define MODE_2		(0x0020)	// Step Size Mode bit 2
 #define MODE_3		(0x0040)	// Step Size Mode bit 3
 #define EXSTALL		(0x0080)	// Internal/External stall detect
-#define ISGAIN_0	(0x0100)	// ISENSE amplifier bit 0
-#define ISGAIN_1	(0x0200)	// ISENSE amplifier bit 1
+#define ISGAIN_0		(0x0100)	// ISENSE amplifier bit 0
+#define ISGAIN_1		(0x0200)	// ISENSE amplifier bit 1
 #define DTIME_0		(0x0400)	// Dead Time bit 0
 #define DTIME_1		(0x0400)	// Dead Time bit 1
 
@@ -39,9 +39,9 @@
 #define STEP1_2		(1*8u)		// 0001: Half step
 #define STEP1_4		(2*8u)		// 0010: 1/4 step
 #define STEP1_8		(3*8u)		// 0011: 1/8 step
-#define STEP1_16	(4*8u)		// 0100: 1/16 step
-#define STEP1_32	(5*8u)		// 0101: 1/32 step
-#define STEP1_64	(6*8u)		// 0110: 1/64 step
+#define STEP1_16		(4*8u)		// 0100: 1/16 step
+#define STEP1_32		(5*8u)		// 0101: 1/32 step
+#define STEP1_64		(6*8u)		// 0110: 1/64 step
 #define STEP1_128	(7*8u)		// 0111: 1/128 step
 #define STEP1_256	(8*8u)		// 1000: 1/126 step
 
@@ -168,6 +168,11 @@ public:
 	DRV8711(uint8_t SlaveSelectPin);
 	
 	void configureRegisters();
+	void MoveOneStep(uint8_t StepPin, long usTime);
+	void MoveNoOfSteps(uint8_t StepPin, long usTime, long NoOfSteps);
+	void StopMotor();
+	void SetStepMode(uint8_t Mode);
+	
 	//DRV8711(uint8_t deviceAddress);
 	//DRV8711(uint8_t deviceAddress, uint8_t channel);
 /*	void begin();
@@ -182,7 +187,7 @@ public:
 //private:
 		// global variable
 	void writeRegister(uint16_t Data);
-
+	uint16_t readRegister(uint8_t Address);
 //	uint8_t _channel;
 //	uint8_t _deviceAddress;
 //	uint8_t _gdo0;
